@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Weather({ temp, condition }) {
 	function localizeKR() {
@@ -29,8 +30,13 @@ export default function Weather({ temp, condition }) {
 	localizeKR();
 	return (
 		<View style={styles.container}>
-			<Text>현재 기온: {temp}도</Text>
-			<Text>현재 날씨: {condition}</Text>
+			<View style={styles.topContainer}>
+				<MaterialCommunityIcons size={86} name="weather-lightning-rainy" />
+				<Text style={styles.text}>{temp}°</Text>
+			</View>
+			<View style={styles.botContainer}>
+				<Text style={styles.text}>{condition}</Text>
+			</View>
 		</View>
 	);
 }
@@ -56,5 +62,18 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+	text: {
+		fontSize: 42
+	},
+	topContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'flex-end'
+	},
+	botContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
 	}
 });
