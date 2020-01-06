@@ -13,23 +13,22 @@ export default class extends React.Component {
 		isLoading: true
 	};
 	getWeather = async (latitude, longitude) => {
-		try {
-			const { data: { main: { temp }, weather } } = await axios.get(
-				`${WEATHER_API}lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
-			);
-			this.setState({ isLoading: false, temp, condition: weather[0].main });
-		} catch (err) {
-			Alert.alert("I can't get weather..");
-		}
+		const { data: { main: { temp }, weather } } = await axios.get(
+			`${WEATHER_API}lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+		);
+		this.setState({
+			isLoading: false,
+			condition: weather[0].main,
+			temp
+		});
 	};
 	getLocation = async () => {
 		try {
 			await Location.requestPermissionsAsync();
 			const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync();
 			this.getWeather(latitude, longitude);
-			this.setState({ isLoading: false });
-		} catch (err) {
-			Alert.alert("I can't get location..");
+		} catch (error) {
+			Alert.alert("Can't find you.", 'So sad');
 		}
 	};
 	componentDidMount() {

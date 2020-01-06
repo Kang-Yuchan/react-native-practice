@@ -1,43 +1,85 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function Weather({ temp, condition }) {
-	function localizeKR() {
-		if (condition === 'Clear') {
-			condition = '맑음';
-		} else if (condition === 'Drizzle') {
-			condition = '이슬비';
-		} else if (condition === 'Rain') {
-			condition = '비내림';
-		} else if (condition === 'Snow') {
-			condition = '눈내림';
-		} else if (condition === 'Thunderstorm') {
-			condition = '천둥치는 폭풍우';
-		} else if (condition === 'Clouds') {
-			condition = '흐림';
-		} else if (condition === 'Haze') {
-			condition = '안개낌';
-		} else if (condition === 'Mist') {
-			condition = '안개낌';
-		} else if (condition === 'Fog') {
-			condition = '안개낌';
-		} else if (condition === 'Dust') {
-			condition = '먼지낌';
-		}
+const weatherOptions = {
+	Thunderstorm: {
+		iconName: 'weather-lightning',
+		gradient: [ '#373B44', '#4286f4' ],
+		title: '천둥번개를 동반한 폭풍우',
+		subtitle: '밖에 나가면..알지?'
+	},
+	Drizzle: {
+		iconName: 'weather-hail',
+		gradient: [ '#89F7FE', '#66A6FF' ],
+		title: '이슬비가 촉촉..',
+		subtitle: '촉촉한 초코칩이 땡기는 그런 날씨지?'
+	},
+	Rain: {
+		iconName: 'weather-rainy',
+		gradient: [ '#00C6FB', '#005BEA' ],
+		title: '비가 내리고...',
+		subtitle: 'ASMR ㅗㅜㅑ...'
+	},
+	Snow: {
+		iconName: 'weather-snowy',
+		gradient: [ '#7DE2FC', '#B9B6E5' ],
+		title: '눈이 내리고...',
+		subtitle: '홀리쓋 엘싸!'
+	},
+	Clear: {
+		iconName: 'weather-sunny',
+		gradient: [ '#FF7300', '#FEF253' ],
+		title: '내 마음처럼 맑은 날씨',
+		subtitle: '아..광합성한다'
+	},
+	Clouds: {
+		iconName: 'weather-cloudy',
+		gradient: [ '#D7D2CC', '#304352' ],
+		title: '흐림. 그저 흐림',
+		subtitle: '우산 안챙기면 후회할것만 같은 그런~~~날씨?'
+	},
+	Mist: {
+		iconName: 'weather-fog',
+		gradient: [ '#4DA0B0', '#D39D38' ],
+		title: '안개가 자욱..',
+		subtitle: '혹시 영화 미스트라고 아니?'
+	},
+	Dust: {
+		iconName: 'weather-hail',
+		gradient: [ '#4DA0B0', '#D39D38' ],
+		title: '어우..미세먼지',
+		subtitle: 'ㅎㅎ 짱ㄲ..아니 중국 조심하자!'
+	},
+	Haze: {
+		iconName: 'weather-fog',
+		gradient: [ '#4DA0B0', '#D39D38' ],
+		title: '안개가 자욱..',
+		subtitle: '앙..안개띠..'
+	},
+	Fog: {
+		iconName: 'weather-fog',
+		gradient: [ '#4DA0B0', '#D39D38' ],
+		title: '안개가 자욱..',
+		subtitle: '조심해! 녀석이 안보인다!!'
 	}
-	localizeKR();
+};
+
+export default function Weather({ temp, condition }) {
 	return (
-		<View style={styles.container}>
-			<View style={styles.topContainer}>
-				<MaterialCommunityIcons size={86} name="weather-lightning-rainy" />
-				<Text style={styles.text}>{temp}°</Text>
+		<LinearGradient colors={weatherOptions[condition].gradient} style={styles.container}>
+			<StatusBar barStyle="light-content" />
+			<View style={styles.halfContainer}>
+				<MaterialCommunityIcons size={96} name={weatherOptions[condition].iconName} color="white" />
+				<Text style={styles.temp}>{temp}°</Text>
 			</View>
-			<View style={styles.botContainer}>
-				<Text style={styles.text}>{condition}</Text>
+			<View style={styles.textContainer}>
+				<Text style={styles.title}>{weatherOptions[condition].title}</Text>
+				<Text style={styles.subtitle}>{weatherOptions[condition].subtitle}</Text>
 			</View>
-		</View>
+		</LinearGradient>
 	);
 }
 
@@ -59,21 +101,34 @@ Weather.propTypes = {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	temp: {
+		fontSize: 42,
+		color: 'white'
+	},
+	halfContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	text: {
-		fontSize: 42
+	title: {
+		color: 'white',
+		fontSize: 44,
+		fontWeight: '300',
+		marginBottom: 10,
+		textAlign: 'left'
 	},
-	topContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'flex-end'
+	subtitle: {
+		fontWeight: '600',
+		color: 'white',
+		fontSize: 24,
+		textAlign: 'left'
 	},
-	botContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
+	textContainer: {
+		alignItems: 'flex-start',
+		paddingHorizontal: 40,
+		justifyContent: 'center',
+		flex: 1
 	}
 });
